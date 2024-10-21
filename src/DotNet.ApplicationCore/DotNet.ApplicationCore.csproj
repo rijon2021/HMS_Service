@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>disable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="DTOs\Common\UserDto.cs" />
+		<Compile Remove="DTOs\Common\UserModel.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="13.0.1" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+		<PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
+		<PackageReference Include="System.Text.Json" Version="8.0.3" />
+		<PackageReference Include="xunit.assert" Version="2.7.1" />
+		<PackageReference Include="xunit.extensibility.core" Version="2.7.1" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <Folder Include="DTOs\VM\AdministrativeUnit\" />
+	  <Folder Include="Entities\AdministrativeUnit\" />
+	  <Folder Include="Entities\CDA\" />
+	</ItemGroup>
+</Project>

@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Repositories\Infrastructure\GenericRepositoryWrapper.cs" />
+    <Compile Remove="Repositories\Infrastructure\IGenericRepositoryWrapper.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EPPlus" Version="4.5.3.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--<ProjectReference Include="..\..\DotNet.Repository\DotNet.Repository.csproj" />-->
+    <ProjectReference Include="..\DotNet.ApplicationCore\DotNet.ApplicationCore.csproj" />
+    <ProjectReference Include="..\DotNet.Infrastructure\DotNet.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Repositories\Common\AdministrativeUnit\" />
+    <Folder Include="Repositories\Interfaces\Common\AdministrativeUnit\" />
+    <Folder Include="Services\Common\AdministrativeUnit\" />
+    <Folder Include="Services\Interfaces\Common\AdministrativeUnit\" />
+  </ItemGroup>
+
+</Project>
