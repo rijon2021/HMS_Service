@@ -49,4 +49,11 @@ namespace DotNet.ApplicationCore.DTOs
         public byte[]? UserImage { get; set; }
         public int Status { get; set; }
     }
+
+    public class UserLoginRequest
+    {
+        public string UserName { get; set; }
+        public string Password { get; set; }
+       
+    }
 }

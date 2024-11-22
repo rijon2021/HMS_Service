@@ -68,5 +68,39 @@ namespace DotNet.WebApi.Controllers.Common
 
             return await Task.FromResult(Ok(resMes));
         }
+
+        [HttpPost("login"), AllowAnonymous]
+        public async Task<IActionResult> Login(UserLoginRequest _user)
+        {
+            AuthUser user = new AuthUser{UserID= _user.UserName, Password=_user.Password };
+         
+     
+            
+            ResponseMessage resMes = userSvc.UserAuthentication(user);
+
+            AuthUser authUser = (AuthUser)resMes.ResponseObj;
+            if (authUser == null || authUser.UserAutoID == 0)
+            {
+                resMes.StatusCode = ReturnStatus.Failed;
+                return await Task.FromResult(Ok(resMes));
+            }
+
+            authUser.TokenResult = tokenSvc.BuildToken(authUser);
+
+            var lstPermission = await permSvc.GetListByUserRoleID(authUser.UserRoleID);
+            lstPermission = permSvc.MakeListWithChild((List<Permission>)lstPermission);
+
+            var userRole = await userRoleSvc.GetByID(authUser.UserRoleID);
+            authUser.UserRole = mapper.Map<VMUserRole>(userRole);
+            authUser.Permissions = (List<PermissionDTO>)lstPermission;
+            authUser.GlobalSettings = await globalSettingSvc.GetAllWithUserOrganization();
+
+            //  authUser.ApplicationTypes = (List<ApplicationTypes>)await appTypeRepo.GetAll(authUser.UserAutoID, authUser.UserRoleID);
+
+            resMes.ResponseObj = authUser;
+            resMes.StatusCode = ReturnStatus.Success;
+
+            return await Task.FromResult(Ok(resMes));
+        }
     }
 }

@@ -14,6 +14,11 @@ using DotNet.Services.Repositories.Interfaces;
 using DotNet.Services.Repositories;
 using DotNet.Services.Services.Interfaces;
 using DotNet.Services.Services;
+using DotNet.Services.HMS.Services.Implementations;
+using DotNet.Services.HMS.Services.Interfaces;
+using DotNet.Services.HMS.Repositories.Interfaces;
+using DotNet.Services.HMS.Repositories.Implementation;
+
 
 
 namespace DotNet.Services
@@ -32,6 +37,15 @@ namespace DotNet.Services
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            // Register the generic service for all entities
+            services.AddScoped(typeof(IService<>), typeof(Service<>));
+
+            // Register the generic repository for all entities
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+            // Register UnitOfWork
+            services.AddScoped<DotNet.Services.HMS.UnitOfWork.IUnitOfWork, DotNet.Services.HMS.UnitOfWork.UnitOfWork>();
 
             var serviceProvider = services.BuildServiceProvider();
             try

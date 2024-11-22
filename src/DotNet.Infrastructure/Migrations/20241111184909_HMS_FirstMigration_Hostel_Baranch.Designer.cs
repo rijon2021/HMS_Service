@@ -4,16 +4,19 @@ using DotNet.Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Store.Infrastructure.Migrations
+namespace Daud.Infrastructure.Migrations
 {
     [DbContext(typeof(DotNetContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20241111184909_HMS_FirstMigration_Hostel_Baranch")]
+    partial class HMS_FirstMigration_Hostel_Baranch
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,36 +148,6 @@ namespace Store.Infrastructure.Migrations
                     b.ToTable("GlobalSettings", "core");
                 });
 
-            modelBuilder.Entity("DotNet.ApplicationCore.Entities.HMS.Bed", b =>
-                {
-                    b.Property<int>("BedId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BedId"));
-
-                    b.Property<string>("BedNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsAssigned")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("RoomId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("BedId");
-
-                    b.HasIndex("RoomId");
-
-                    b.ToTable("Beds", "core");
-                });
-
             modelBuilder.Entity("DotNet.ApplicationCore.Entities.HMS.Branch", b =>
                 {
                     b.Property<int>("BranchId")
@@ -258,39 +231,6 @@ namespace Store.Infrastructure.Migrations
                     b.HasKey("HostelId");
 
                     b.ToTable("Hostels", "core");
-                });
-
-            modelBuilder.Entity("DotNet.ApplicationCore.Entities.HMS.Room", b =>
-                {
-                    b.Property<int>("RoomId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoomId"));
-
-                    b.Property<int>("BranchId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Capacity")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("RoomCategory")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RoomNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("RoomId");
-
-                    b.HasIndex("BranchId");
-
-                    b.ToTable("Rooms", "core");
                 });
 
             modelBuilder.Entity("DotNet.ApplicationCore.Entities.NotificationArea", b =>
@@ -651,17 +591,6 @@ namespace Store.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("DotNet.ApplicationCore.Entities.HMS.Bed", b =>
-                {
-                    b.HasOne("DotNet.ApplicationCore.Entities.HMS.Room", "Room")
-                        .WithMany("Beds")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Room");
-                });
-
             modelBuilder.Entity("DotNet.ApplicationCore.Entities.HMS.Branch", b =>
                 {
                     b.HasOne("DotNet.ApplicationCore.Entities.HMS.Hostel", "Hostel")
@@ -673,30 +602,9 @@ namespace Store.Infrastructure.Migrations
                     b.Navigation("Hostel");
                 });
 
-            modelBuilder.Entity("DotNet.ApplicationCore.Entities.HMS.Room", b =>
-                {
-                    b.HasOne("DotNet.ApplicationCore.Entities.HMS.Branch", "Branch")
-                        .WithMany("Rooms")
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Branch");
-                });
-
-            modelBuilder.Entity("DotNet.ApplicationCore.Entities.HMS.Branch", b =>
-                {
-                    b.Navigation("Rooms");
-                });
-
             modelBuilder.Entity("DotNet.ApplicationCore.Entities.HMS.Hostel", b =>
                 {
                     b.Navigation("Branches");
-                });
-
-            modelBuilder.Entity("DotNet.ApplicationCore.Entities.HMS.Room", b =>
-                {
-                    b.Navigation("Beds");
                 });
 #pragma warning restore 612, 618
         }

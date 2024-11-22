@@ -12,6 +12,9 @@ using DotNet.ApplicationCore.Middleware;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
+using DotNet.ApplicationCore.Entities.HMS;
+using DotNet.Services.HMS.Services.Interfaces;
+using DotNet.Services.HMS.Services.Implementations;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -79,6 +82,19 @@ builder.Services
             ValidateAudience = false
         };
     });
+
+
+
+//// Register the generic service for all entities
+//builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));
+
+//// Register the generic repository for all entities
+//builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+//// Register UnitOfWork
+//builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+
 
 await using var app = builder.Build();
 
