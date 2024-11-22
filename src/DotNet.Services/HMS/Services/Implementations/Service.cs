@@ -43,6 +43,7 @@ namespace DotNet.Services.HMS.Services.Implementations
             _repository.Delete(entity);
             await _unitOfWork.SaveChangesAsync();
         }
+     
 
         public async Task<IEnumerable<T>> GetAll()
         {

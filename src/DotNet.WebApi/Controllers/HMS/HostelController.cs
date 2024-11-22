@@ -95,7 +95,18 @@ namespace DotNet.WebApi.Controllers.HMS
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-             await _service.Delete(id);
+            // Fetch the existing entity from the database
+            var existingEntity = await _service.GetById(id);
+            if (existingEntity == null)
+                return NotFound(); 
+                                   
+            
+            existingEntity.IsDeleted = true; 
+            existingEntity.DeletedBy = 0;
+            existingEntity.DeletedAt = DateTime.UtcNow;
+
+            // Call the service to save changes
+            await _service.Update(existingEntity);
             return NoContent();
         }
     }
