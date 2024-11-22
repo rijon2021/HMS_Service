@@ -15,7 +15,7 @@ namespace DotNet.WebApi.DTOs
         public string Description { get; set; }         // Short description or overview of the hostel
         public List<string> Amenities { get; set; }     // List of available amenities (WiFi, Gym, Library, etc.)
         public string HostelManager { get; set; }       // Name of the overall manager responsible for the hostel
-        public DateTime CreatedDate { get; set; }       // Date when the record was created
-        public DateTime UpdatedDate { get; set; }       // Date when the record was last updated
+       
+        
     }
 }

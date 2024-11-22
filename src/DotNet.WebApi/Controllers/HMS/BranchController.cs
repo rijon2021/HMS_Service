@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System;
 using DotNet.Services.HMS.Services.Interfaces;
+using DotNet.WebApi.DTOs;
 
 namespace DotNet.WebApi.Controllers.HMS
 {
@@ -34,12 +35,21 @@ namespace DotNet.WebApi.Controllers.HMS
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Branch _entity)
+        public async Task<IActionResult> Create([FromBody] BranchDto _entityDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var entity = _service.Add(_entity);
-            return Ok(entity);
+            var _entity = new Branch { 
+                BranchCode = _entityDto.BranchCode,
+                BranchName = _entityDto.BranchName,
+                Location = _entityDto.Location,
+                Email = _entityDto.Email,
+                ContactNumber = _entityDto.Phone,
+                HostelId= _entityDto.HostelId,
+            };
+             var CreatedEntity=   _service.Add(_entity);
+            var createdEntity = await _service.Add(_entity);
+            return CreatedAtAction(nameof(GetById), new { id = createdEntity.BranchId }, createdEntity);
         }
 
         [HttpPut("{id}")]

@@ -56,20 +56,39 @@ namespace DotNet.WebApi.Controllers.HMS
                 Description = entityDto.Description,
                 Amenities = entityDto.Amenities, // Assuming List<string> can be mapped directly
                 HostelManager = entityDto.HostelManager,
-                CreatedDate = entityDto.CreatedDate,
-                UpdatedDate = entityDto.UpdatedDate
+                CreatedBy=0,
+                CreatedAt=DateTime.UtcNow
+                
             };
             var createdEntity = await _service.Add(_entity);
             return CreatedAtAction(nameof(GetById), new { id = createdEntity.HostelId }, createdEntity);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] Hostel entity)
+        public async Task<IActionResult> Update(int id, [FromBody] DTOs.HostelDto entityDto)
         {
-            if (id != entity.HostelId)
-                return BadRequest();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            // Fetch the existing entity from the database
+            var existingEntity = await _service.GetById(id);
+            if (existingEntity == null)
+                return NotFound(); // Handle the case where the entity does not exist
+                                   // Update the properties of the existing entity
+            existingEntity.HostelName = entityDto.HostelName;
+            existingEntity.Address = entityDto.Address;
+            existingEntity.ContactNumber = entityDto.ContactNumber;
+            existingEntity.Email = entityDto.Email;
+            existingEntity.Website = entityDto.Website;
+            existingEntity.TotalBranches = entityDto.TotalBranches;
+            existingEntity.EstablishedDate = entityDto.EstablishedDate;
+            existingEntity.Description = entityDto.Description;
+            existingEntity.Amenities = entityDto.Amenities; // Assuming List<string> is directly assignable
+            existingEntity.HostelManager = entityDto.HostelManager;
+            existingEntity.UpdatedBy = 0; // Replace with actual user ID or logic
+            existingEntity.UpdatedAt = DateTime.UtcNow;
 
-            await _service.Update(entity);
+            // Call the service to save changes
+            await _service.Update(existingEntity);
             return NoContent();
         }
 

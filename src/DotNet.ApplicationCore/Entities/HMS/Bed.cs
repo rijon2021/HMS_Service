@@ -10,15 +10,14 @@ using System.Threading.Tasks;
 namespace DotNet.ApplicationCore.Entities.HMS
 {
     [Table("Beds", Schema = "core")]
-    public  class Bed
+    public  class Bed:BaseEntity
     {
         [Key]
         public int BedId { get; set; }
         public int RoomId { get; set; }
         public string BedNumber { get; set; }
         public bool IsAssigned { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime UpdatedDate { get; set; }
+        
 
         // Navigation properties
         public Room Room { get; set; }
