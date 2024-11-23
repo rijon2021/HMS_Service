@@ -42,9 +42,8 @@ namespace DotNet.Services.HMS.Repositories.Implementation
 
         public void Delete(T entity)
         {
-            try {
-                _dbSet.Remove(entity);
-            } catch (Exception ex) { }
+            
+         _dbSet.Remove(entity);            
             
         }
     }

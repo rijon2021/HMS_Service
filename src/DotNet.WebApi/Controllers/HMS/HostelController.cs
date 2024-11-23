@@ -9,11 +9,12 @@ using Newtonsoft.Json;
 using DotNet.Services.HMS.Services.Interfaces;
 using DotNet.WebApi.DTOs;
 using DotNet.ApplicationCore.DTOs.HMS;
+using System.Collections.Generic;
 
 namespace DotNet.WebApi.Controllers.HMS
 {
     
-    [ Route("api/[controller]"), ApiController]
+    [Authorize, Route("api/[controller]"), ApiController]
     public class HostelController : ControllerBase
     {
         private readonly IService<Hostel> _service;
@@ -35,7 +36,7 @@ namespace DotNet.WebApi.Controllers.HMS
         {
             var entity = await _service.GetById(id);
             if (entity == null)
-                return NotFound();
+                return NotFound(new { message = Messages.EntityNotFound });
             return Ok(entity);
         }
 
@@ -61,7 +62,8 @@ namespace DotNet.WebApi.Controllers.HMS
                 
             };
             var createdEntity = await _service.Add(_entity);
-            return CreatedAtAction(nameof(GetById), new { id = createdEntity.HostelId }, createdEntity);
+            //return CreatedAtAction(nameof(GetById), new { id = createdEntity.HostelId }, createdEntity);
+            return Ok(new { message = Messages.CreationSuccessful,entity= createdEntity });
         }
 
         [HttpPut("{id}")]
@@ -72,7 +74,7 @@ namespace DotNet.WebApi.Controllers.HMS
             // Fetch the existing entity from the database
             var existingEntity = await _service.GetById(id);
             if (existingEntity == null)
-                return NotFound(); // Handle the case where the entity does not exist
+                return NotFound(new { message = Messages.EntityNotFound }); // Handle the case where the entity does not exist
                                    // Update the properties of the existing entity
             existingEntity.HostelName = entityDto.HostelName;
             existingEntity.Address = entityDto.Address;
@@ -89,25 +91,32 @@ namespace DotNet.WebApi.Controllers.HMS
 
             // Call the service to save changes
             await _service.Update(existingEntity);
-            return NoContent();
+            return Ok(new { message = Messages.UpdateSuccessful }); // 200 OK with message
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            // Fetch the existing entity from the database
-            var existingEntity = await _service.GetById(id);
-            if (existingEntity == null)
-                return NotFound(); 
+            try { 
+            //// Fetch the existing entity from the database
+            //var existingEntity = await _service.GetById(id);
+            //if (existingEntity == null)
+            //    return NotFound(); 
                                    
             
-            existingEntity.IsDeleted = true; 
-            existingEntity.DeletedBy = 0;
-            existingEntity.DeletedAt = DateTime.UtcNow;
+            //existingEntity.IsDeleted = true; 
+            //existingEntity.DeletedBy = 0;
+            //existingEntity.DeletedAt = DateTime.UtcNow;
 
-            // Call the service to save changes
-            await _service.Update(existingEntity);
-            return NoContent();
+            //// Call the service to save changes
+            //await _service.Update(existingEntity);
+               await _service.Delete(id);
+                return Ok(new { message = Messages.DeletionSuccessful }); // 200 OK with message
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message }); // 404 Not Found
+            }
         }
     }
 

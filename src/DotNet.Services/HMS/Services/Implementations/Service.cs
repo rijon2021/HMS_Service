@@ -38,7 +38,7 @@ namespace DotNet.Services.HMS.Services.Implementations
             var entity = await _repository.GetByIdAsync(id);
             if (entity == null)
             {
-                throw new Exception($"Entity with ID {id} not found.");
+                throw new KeyNotFoundException("Entity not found");
             }
             _repository.Delete(entity);
             await _unitOfWork.SaveChangesAsync();
