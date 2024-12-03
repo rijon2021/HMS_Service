@@ -4,11 +4,12 @@ using System.Threading.Tasks;
 using System;
 using DotNet.Services.HMS.Services.Interfaces;
 using DotNet.WebApi.DTOs;
+using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 
 namespace DotNet.WebApi.Controllers.HMS
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [Authorize, Route("api/[controller]"), ApiController]
     public class BranchController : ControllerBase
     {
         private readonly IService<Branch> _service;
@@ -30,43 +31,79 @@ namespace DotNet.WebApi.Controllers.HMS
         {
             var entity = await _service.GetById(id);
             if (entity == null)
-                return NotFound();
+                return NotFound(new { message = Messages.EntityNotFound });
             return Ok(entity);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] BranchDto _entityDto)
+        public async Task<IActionResult> Create([FromBody] DTOs.BranchDto entityDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var _entity = new Branch { 
-                BranchCode = _entityDto.BranchCode,
-                BranchName = _entityDto.BranchName,
-                Location = _entityDto.Location,
-                Email = _entityDto.Email,
-                ContactNumber = _entityDto.Phone,
-                HostelId= _entityDto.HostelId,
+            var _entity = new Branch
+            {
+                BranchName = entityDto.BranchName,
+                Location = entityDto.Location,
+                ContactNumber = entityDto.Phone,
+                Email = entityDto.Email,
+                HostelId=entityDto.HostelId,
+                CreatedBy = 0,
+                CreatedAt = DateTime.UtcNow
+
             };
-             var CreatedEntity=   _service.Add(_entity);
             var createdEntity = await _service.Add(_entity);
-            return CreatedAtAction(nameof(GetById), new { id = createdEntity.BranchId }, createdEntity);
+            //return CreatedAtAction(nameof(GetById), new { id = createdEntity.BranchId }, createdEntity);
+            return Ok(new { message = Messages.CreationSuccessful, entity = createdEntity });
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] Branch entity)
+        public async Task<IActionResult> Update(int id, [FromBody] DTOs.BranchDto entityDto)
         {
-            if (id != entity.BranchId)
-                return BadRequest();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            // Fetch the existing entity from the database
+            var existingEntity = await _service.GetById(id);
+            if (existingEntity == null)
+                return NotFound(new { message = Messages.EntityNotFound }); // Handle the case where the entity does not exist
+                                                                            // Update the properties of the existing entity
+            existingEntity.HostelId = entityDto.HostelId;
+            existingEntity.BranchName = entityDto.BranchName;
+            existingEntity.BranchCode = entityDto.BranchCode;
+            existingEntity.Location = entityDto.Location;
+            existingEntity.ContactNumber = entityDto.Phone;
+            existingEntity.Email = entityDto.Email;
+            existingEntity.UpdatedBy = 0; // Replace with actual user ID or logic
+            existingEntity.UpdatedAt = DateTime.UtcNow;
 
-            _service.Update(entity);
-            return NoContent();
+            // Call the service to save changes
+            await _service.Update(existingEntity);
+            return Ok(new { message = Messages.UpdateSuccessful }); // 200 OK with message
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            _service.Delete(id);
-            return NoContent();
+            try
+            {
+                //// Fetch the existing entity from the database
+                //var existingEntity = await _service.GetById(id);
+                //if (existingEntity == null)
+                //    return NotFound(); 
+
+
+                //existingEntity.IsDeleted = true; 
+                //existingEntity.DeletedBy = 0;
+                //existingEntity.DeletedAt = DateTime.UtcNow;
+
+                //// Call the service to save changes
+                //await _service.Update(existingEntity);
+                await _service.Delete(id);
+                return Ok(new { message = Messages.DeletionSuccessful }); // 200 OK with message
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message }); // 404 Not Found
+            }
         }
     }
 

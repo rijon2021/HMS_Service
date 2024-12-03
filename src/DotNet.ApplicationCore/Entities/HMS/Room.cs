@@ -15,11 +15,12 @@ namespace DotNet.ApplicationCore.Entities.HMS
         public int RoomId { get; set; }
         public string RoomNumber { get; set; }
         public int BranchId { get; set; }// Foreign Key referencing Branch
-        public string RoomCategory { get; set; }
+        public int RoomCategoryId { get; set; }
         public int Capacity { get; set; }
 
         // Navigation properties
         public Branch Branch { get; set; }
+        public RoomCategory RoomCategory { get; set; }
         public ICollection<Bed> Beds { get; set; }
     }
 }

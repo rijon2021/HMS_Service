@@ -18,15 +18,18 @@ namespace DotNet.WebApi.Controllers.HMS
     public class HostelController : ControllerBase
     {
         private readonly IService<Hostel> _service;
+        private readonly IAuthUserService _userService;
 
-        public HostelController(IService<Hostel> service)
+        public HostelController(IService<Hostel> service, IAuthUserService userService)
         {
             _service = service;
+            _userService = userService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
+            var userId = _userService.GetUserId(HttpContext); // Use the middleware service to get User ID
             var entities = await _service.GetAll();
             return Ok(entities);
         }
@@ -45,6 +48,7 @@ namespace DotNet.WebApi.Controllers.HMS
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            var userId = _userService.GetUserId(HttpContext); // Use the middleware service to get User ID
             var _entity = new Hostel
             {
                 HostelName = entityDto.HostelName,
@@ -55,9 +59,10 @@ namespace DotNet.WebApi.Controllers.HMS
                 TotalBranches = entityDto.TotalBranches,
                 EstablishedDate = entityDto.EstablishedDate,
                 Description = entityDto.Description,
-                Amenities = entityDto.Amenities, // Assuming List<string> can be mapped directly
+               // Amenities = entityDto.Amenities, // Assuming List<string> can be mapped directly
                 HostelManager = entityDto.HostelManager,
-                CreatedBy=0,
+                Status = entityDto.Status,
+                CreatedBy= userId,
                 CreatedAt=DateTime.UtcNow
                 
             };
@@ -75,7 +80,8 @@ namespace DotNet.WebApi.Controllers.HMS
             var existingEntity = await _service.GetById(id);
             if (existingEntity == null)
                 return NotFound(new { message = Messages.EntityNotFound }); // Handle the case where the entity does not exist
-                                   // Update the properties of the existing entity
+            var userId = _userService.GetUserId(HttpContext); // Use the middleware service to get User ID
+            // Update the properties of the existing entity
             existingEntity.HostelName = entityDto.HostelName;
             existingEntity.Address = entityDto.Address;
             existingEntity.ContactNumber = entityDto.ContactNumber;
@@ -84,9 +90,10 @@ namespace DotNet.WebApi.Controllers.HMS
             existingEntity.TotalBranches = entityDto.TotalBranches;
             existingEntity.EstablishedDate = entityDto.EstablishedDate;
             existingEntity.Description = entityDto.Description;
-            existingEntity.Amenities = entityDto.Amenities; // Assuming List<string> is directly assignable
+           // existingEntity.Amenities = entityDto.Amenities; // Assuming List<string> is directly assignable
             existingEntity.HostelManager = entityDto.HostelManager;
-            existingEntity.UpdatedBy = 0; // Replace with actual user ID or logic
+            existingEntity.Status = entityDto.Status;
+            existingEntity.UpdatedBy = userId; // Replace with actual user ID or logic
             existingEntity.UpdatedAt = DateTime.UtcNow;
 
             // Call the service to save changes

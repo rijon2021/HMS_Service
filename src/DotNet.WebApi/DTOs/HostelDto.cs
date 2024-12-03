@@ -13,8 +13,9 @@ namespace DotNet.WebApi.DTOs
         public int TotalBranches { get; set; }          // Number of branches under the hostel
         public DateTime EstablishedDate { get; set; }   // Date of establishment
         public string Description { get; set; }         // Short description or overview of the hostel
-        public List<string> Amenities { get; set; }     // List of available amenities (WiFi, Gym, Library, etc.)
+       
         public string HostelManager { get; set; }       // Name of the overall manager responsible for the hostel
+        public byte Status { get; set; }       // Name of the overall manager responsible for the hostel
        
         
     }

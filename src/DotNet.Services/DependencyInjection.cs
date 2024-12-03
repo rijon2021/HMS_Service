@@ -40,6 +40,8 @@ namespace DotNet.Services
 
             // Register the generic service for all entities
             services.AddScoped(typeof(IService<>), typeof(Service<>));
+            // Register the auth-user service 
+            services.AddScoped(typeof(IAuthUserService), typeof(AuthUserService));
 
             // Register the generic repository for all entities
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -78,7 +80,7 @@ namespace DotNet.Services
         public static void AddServices(this IServiceCollection services)
         {
             services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserService, Services.Common.UserService>();
             services.AddScoped<IPermissionService, PermissionService>();
             services.AddScoped<IUserRoleService, UserRoleService>();
             services.AddScoped<IGlobalSettingService, GlobalSettingService>();

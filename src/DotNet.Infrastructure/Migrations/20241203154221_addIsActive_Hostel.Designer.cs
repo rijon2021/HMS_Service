@@ -4,16 +4,19 @@ using DotNet.Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Store.Infrastructure.Migrations
+namespace Daud.Infrastructure.Migrations
 {
     [DbContext(typeof(DotNetContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20241203154221_addIsActive_Hostel")]
+    partial class addIsActive_Hostel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -177,9 +180,6 @@ namespace Store.Infrastructure.Migrations
                     b.Property<int>("RoomId")
                         .HasColumnType("int");
 
-                    b.Property<byte>("Status")
-                        .HasColumnType("tinyint");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -200,9 +200,6 @@ namespace Store.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BranchId"));
-
-                    b.Property<string>("Amenities")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BranchCode")
                         .HasColumnType("nvarchar(max)");
@@ -237,9 +234,6 @@ namespace Store.Infrastructure.Migrations
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte>("Status")
-                        .HasColumnType("tinyint");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -262,6 +256,9 @@ namespace Store.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HostelId"));
 
                     b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Amenities")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ContactNumber")
@@ -294,11 +291,11 @@ namespace Store.Infrastructure.Migrations
                     b.Property<string>("HostelName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<byte>("Status")
-                        .HasColumnType("tinyint");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<int>("TotalBranches")
                         .HasColumnType("int");
@@ -346,14 +343,11 @@ namespace Store.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("RoomCategoryId")
-                        .HasColumnType("int");
+                    b.Property<string>("RoomCategory")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RoomNumber")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte>("Status")
-                        .HasColumnType("tinyint");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -365,52 +359,7 @@ namespace Store.Infrastructure.Migrations
 
                     b.HasIndex("BranchId");
 
-                    b.HasIndex("RoomCategoryId");
-
                     b.ToTable("Rooms", "core");
-                });
-
-            modelBuilder.Entity("DotNet.ApplicationCore.Entities.HMS.RoomCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DeletedBy")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte>("Status")
-                        .HasColumnType("tinyint");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("UpdatedBy")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RoomCategories", "core");
                 });
 
             modelBuilder.Entity("DotNet.ApplicationCore.Entities.NotificationArea", b =>
@@ -801,15 +750,7 @@ namespace Store.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DotNet.ApplicationCore.Entities.HMS.RoomCategory", "RoomCategory")
-                        .WithMany("Rooms")
-                        .HasForeignKey("RoomCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Branch");
-
-                    b.Navigation("RoomCategory");
                 });
 
             modelBuilder.Entity("DotNet.ApplicationCore.Entities.HMS.Branch", b =>
@@ -825,11 +766,6 @@ namespace Store.Infrastructure.Migrations
             modelBuilder.Entity("DotNet.ApplicationCore.Entities.HMS.Room", b =>
                 {
                     b.Navigation("Beds");
-                });
-
-            modelBuilder.Entity("DotNet.ApplicationCore.Entities.HMS.RoomCategory", b =>
-                {
-                    b.Navigation("Rooms");
                 });
 #pragma warning restore 612, 618
         }
