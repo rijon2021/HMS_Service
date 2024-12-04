@@ -1,20 +1,21 @@
 ﻿using DotNet.ApplicationCore.Entities.HMS;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using System;
 using DotNet.Services.HMS.Services.Interfaces;
 using DotNet.WebApi.DTOs;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 
 namespace DotNet.WebApi.Controllers.HMS
 {
     [Authorize, Route("api/[controller]"), ApiController]
-    public class BranchController : ControllerBase
+    public class RoomCategoryController : Controller
     {
-        private readonly IService<Branch> _service;
+        private readonly IService<RoomCategory> _service;
         private readonly IAuthUserService _userService;
-        public BranchController(IService<Branch> service, IAuthUserService userService)
+
+        public RoomCategoryController(IService<RoomCategory> service, IAuthUserService userService)
         {
             _service = service;
             _userService = userService;
@@ -32,27 +33,24 @@ namespace DotNet.WebApi.Controllers.HMS
         {
             var entity = await _service.GetById(id);
             if (entity == null)
-                return NotFound(new { message = Messages.EntityNotFound });
+                return NotFound();
             return Ok(entity);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] DTOs.BranchDto entityDto)
+        public async Task<IActionResult> Create([FromBody] RoomCategoryDto _entityDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var userId = _userService.GetUserId(HttpContext); // Use the middleware service to get User ID
-            var _entity = new Branch
+            var _entity = new RoomCategory
             {
-                BranchName = entityDto.BranchName,
-                Location = entityDto.Location,
-                ContactNumber = entityDto.Phone,
-                Email = entityDto.Email,
-                HostelId=entityDto.HostelId,
-                Amenities=entityDto.Amenities,
-                Status = entityDto.Status,
-                CreatedBy = userId,
-                CreatedAt = DateTime.UtcNow
+
+                Name = _entityDto.Name,
+                Description = _entityDto.Description,
+                Status = _entityDto.Status,
+                CreatedAt = DateTime.UtcNow,
+                CreatedBy = _userService.GetUserId(HttpContext)
+
 
             };
             var createdEntity = await _service.Add(_entity);
@@ -61,7 +59,7 @@ namespace DotNet.WebApi.Controllers.HMS
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] DTOs.BranchDto entityDto)
+        public async Task<IActionResult> Update(int id, [FromBody] DTOs.RoomCategoryDto entityDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -69,16 +67,11 @@ namespace DotNet.WebApi.Controllers.HMS
             var existingEntity = await _service.GetById(id);
             if (existingEntity == null)
                 return NotFound(new { message = Messages.EntityNotFound }); // Handle the case where the entity does not exist
-            var userId = _userService.GetUserId(HttpContext); // Use the middleware service to get User ID                                               // Update the properties of the existing entity
-            existingEntity.HostelId = entityDto.HostelId;
-            existingEntity.BranchName = entityDto.BranchName;
-            existingEntity.BranchCode = entityDto.BranchCode;
-            existingEntity.Location = entityDto.Location;
-            existingEntity.ContactNumber = entityDto.Phone;
-            existingEntity.Email = entityDto.Email;
-            existingEntity.Amenities = entityDto.Amenities;
+                                                                            // Update the properties of the existing entity
+            existingEntity.Name = entityDto.Name;
+            existingEntity.Description = entityDto.Description;
             existingEntity.Status = entityDto.Status;
-            existingEntity.UpdatedBy = userId; // Replace with actual user ID or logic
+            existingEntity.UpdatedBy = _userService.GetUserId(HttpContext); // Replace with actual user ID or logic
             existingEntity.UpdatedAt = DateTime.UtcNow;
 
             // Call the service to save changes

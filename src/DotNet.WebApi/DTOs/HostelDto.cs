@@ -3,7 +3,7 @@ using System;
 
 namespace DotNet.WebApi.DTOs
 {
-    public class HostelDto
+    public class HostelDto: BaseDto
     {
         public string HostelName { get; set; }          // Name of the hostel
         public string Address { get; set; }             // Address of the main hostel office
@@ -15,7 +15,7 @@ namespace DotNet.WebApi.DTOs
         public string Description { get; set; }         // Short description or overview of the hostel
        
         public string HostelManager { get; set; }       // Name of the overall manager responsible for the hostel
-        public byte Status { get; set; }       // Name of the overall manager responsible for the hostel
+       
        
         
     }

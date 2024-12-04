@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace DotNet.WebApi.Controllers.HMS
 {
-    [Route("api/[controller]"), ApiController]
+    [Authorize, Route("api/[controller]"), ApiController]
     public class RoomController : Controller
     {
         private readonly IService<Room> _service;
@@ -41,17 +41,18 @@ namespace DotNet.WebApi.Controllers.HMS
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] RoomDto _entityDto)
+        public async Task<IActionResult> Create([FromBody] RoomDto entityDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             var _entity = new Room
             {
                 
-                RoomNumber = _entityDto.RoomNumber,
-                RoomCategoryId = _entityDto.RoomCategoryId,
-                Capacity = _entityDto.Capacity,
-                BranchId = _entityDto.BranchId,
+                RoomNumber = entityDto.RoomNumber,
+                RoomCategoryId = entityDto.RoomCategoryId,
+                Capacity = entityDto.Capacity,
+                Status = entityDto.Status,
+                BranchId = entityDto.BranchId,
                 CreatedAt = DateTime.UtcNow,
                 CreatedBy= _userService.GetUserId(HttpContext)
 
@@ -74,7 +75,8 @@ namespace DotNet.WebApi.Controllers.HMS
                                                          // Update the properties of the existing entity
             existingEntity.RoomNumber = entityDto.RoomNumber;
             existingEntity.RoomCategoryId = entityDto.RoomCategoryId;
-            existingEntity.Capacity = entityDto.Capacity;          
+            existingEntity.Capacity = entityDto.Capacity;
+            existingEntity.Status = entityDto.Status;
             existingEntity.UpdatedBy = _userService.GetUserId(HttpContext); // Replace with actual user ID or logic
             existingEntity.UpdatedAt = DateTime.UtcNow;
 

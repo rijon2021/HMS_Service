@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,8 @@ namespace DotNet.ApplicationCore.Entities.HMS
     [Table("RoomCategories", Schema = "core")]
     public class RoomCategory : BaseEntity
     {
-        public int Id { get; set; } // Primary Key
+        [Key]
+        public int RoomCategoryId { get; set; } // Primary Key
 
         public string Name { get; set; } // Name of the category (e.g., Single, Double, Suite)
 
