@@ -13,10 +13,11 @@ namespace DotNet.WebApi.Controllers.HMS
     public class BranchController : ControllerBase
     {
         private readonly IService<Branch> _service;
-
-        public BranchController(IService<Branch> service)
+        private readonly IAuthUserService _userService;
+        public BranchController(IService<Branch> service, IAuthUserService userService)
         {
             _service = service;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -40,6 +41,7 @@ namespace DotNet.WebApi.Controllers.HMS
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            var userId = _userService.GetUserId(HttpContext); // Use the middleware service to get User ID
             var _entity = new Branch
             {
                 BranchName = entityDto.BranchName,
@@ -47,7 +49,8 @@ namespace DotNet.WebApi.Controllers.HMS
                 ContactNumber = entityDto.Phone,
                 Email = entityDto.Email,
                 HostelId=entityDto.HostelId,
-                CreatedBy = 0,
+                Amenities=entityDto.Amenities,
+                CreatedBy = userId,
                 CreatedAt = DateTime.UtcNow
 
             };
@@ -65,14 +68,15 @@ namespace DotNet.WebApi.Controllers.HMS
             var existingEntity = await _service.GetById(id);
             if (existingEntity == null)
                 return NotFound(new { message = Messages.EntityNotFound }); // Handle the case where the entity does not exist
-                                                                            // Update the properties of the existing entity
+            var userId = _userService.GetUserId(HttpContext); // Use the middleware service to get User ID                                               // Update the properties of the existing entity
             existingEntity.HostelId = entityDto.HostelId;
             existingEntity.BranchName = entityDto.BranchName;
             existingEntity.BranchCode = entityDto.BranchCode;
             existingEntity.Location = entityDto.Location;
             existingEntity.ContactNumber = entityDto.Phone;
             existingEntity.Email = entityDto.Email;
-            existingEntity.UpdatedBy = 0; // Replace with actual user ID or logic
+            existingEntity.Amenities = entityDto.Amenities;
+            existingEntity.UpdatedBy = userId; // Replace with actual user ID or logic
             existingEntity.UpdatedAt = DateTime.UtcNow;
 
             // Call the service to save changes

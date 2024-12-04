@@ -29,7 +29,7 @@ namespace DotNet.WebApi.Controllers.HMS
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var userId = _userService.GetUserId(HttpContext); // Use the middleware service to get User ID
+           
             var entities = await _service.GetAll();
             return Ok(entities);
         }
