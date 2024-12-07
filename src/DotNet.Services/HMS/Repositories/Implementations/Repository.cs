@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DotNet.Services.HMS.Repositories.Interfaces;
+using System.Linq.Expressions;
 
 namespace DotNet.Services.HMS.Repositories.Implementation
 {
@@ -28,6 +29,10 @@ namespace DotNet.Services.HMS.Repositories.Implementation
         public async Task<T> GetByIdAsync(int id)
         {
             return await _dbSet.FindAsync(id);
+        }
+        public  IQueryable<T> Query()
+        {
+            return  _dbSet.AsQueryable();
         }
 
         public async Task AddAsync(T entity)

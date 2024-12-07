@@ -21,6 +21,6 @@ namespace DotNet.ApplicationCore.Entities.HMS
 
         // Navigation properties
         public Room Room { get; set; }
-       // public Member AssignedMember { get; set; }
+       public Member AssignedMember { get; set; }
     }
 }

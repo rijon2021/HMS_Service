@@ -1,9 +1,11 @@
 ﻿using DotNet.Services.HMS.Repositories.Interfaces;
 using DotNet.Services.HMS.Services.Interfaces;
 using DotNet.Services.HMS.UnitOfWork;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -53,6 +55,10 @@ namespace DotNet.Services.HMS.Services.Implementations
         public async Task<T> GetById(int id)
         {
             return await _repository.GetByIdAsync(id);
+        }
+        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _repository.Query().Where(predicate).ToListAsync();
         }
     }
 

@@ -23,6 +23,7 @@ namespace DotNet.Infrastructure.Persistence.Contexts
         public DbSet<Branch>  Branches { get; set; }
         public DbSet<Room>  Rooms { get; set; }
         public DbSet<Bed>  Beds { get; set; }
+        public DbSet<Member> Members { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {        
@@ -49,6 +50,20 @@ namespace DotNet.Infrastructure.Persistence.Contexts
                 .WithMany(r => r.Beds) // A Room has many Beds
                 .HasForeignKey(b => b.RoomId) // Foreign key in Bed table
                 .OnDelete(DeleteBehavior.Cascade); // Cascade delete if Room is deleted
+
+            // Member ↔ Branch: Many-to-One
+            modelBuilder.Entity<Member>()
+                .HasOne(m => m.Branch)
+                .WithMany(b => b.Members)
+                .HasForeignKey(m => m.BranchId)
+                .OnDelete(DeleteBehavior.Restrict);            
+
+            // Member ↔ Bed: One-to-One (Optional)
+            modelBuilder.Entity<Member>()
+                .HasOne(m => m.Bed)
+                .WithOne(b => b.AssignedMember)
+                .HasForeignKey<Member>(m => m.BedId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
 
 

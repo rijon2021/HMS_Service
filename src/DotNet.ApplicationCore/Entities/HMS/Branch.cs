@@ -27,7 +27,7 @@ namespace DotNet.ApplicationCore.Entities.HMS
         public Hostel Hostel { get; set; }             // Navigation property to related Hostel entity
         
         public ICollection<Room> Rooms { get; set; }   // List of rooms in this branch
-        //public ICollection<Member> Members { get; set; } // List of members assigned to this branch
+        public ICollection<Member> Members { get; set; } // List of members assigned to this branch
         //public ICollection<Staff> Staff { get; set; }  // List of staff working at this branch
     }
 }

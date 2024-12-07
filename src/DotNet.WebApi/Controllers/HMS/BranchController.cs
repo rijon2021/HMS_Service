@@ -35,6 +35,12 @@ namespace DotNet.WebApi.Controllers.HMS
                 return NotFound(new { message = Messages.EntityNotFound });
             return Ok(entity);
         }
+        [HttpGet("Branches/{hostelId}")]
+        public async Task<IActionResult> GetBranchesByHostel(int hostelId)
+        {
+            var entities = await _service.FindAsync(b => b.HostelId == hostelId);
+            return Ok(entities);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] DTOs.BranchDto entityDto)

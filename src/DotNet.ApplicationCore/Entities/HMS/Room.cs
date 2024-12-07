@@ -22,5 +22,6 @@ namespace DotNet.ApplicationCore.Entities.HMS
         public Branch Branch { get; set; }
         public RoomCategory RoomCategory { get; set; }
         public ICollection<Bed> Beds { get; set; }
+        public ICollection<Member> Members { get; set; }
     }
 }
