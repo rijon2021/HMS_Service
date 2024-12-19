@@ -1,21 +1,21 @@
-﻿using DotNet.ApplicationCore.Entities.HMS;
-using DotNet.Services.HMS.Services.Interfaces;
+﻿using DotNet.Services.HMS.Services.Interfaces;
 using DotNet.WebApi.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System;
+using DotNet.ApplicationCore.Entities.HMS;
 using System.Collections.Generic;
 
 namespace DotNet.WebApi.Controllers.HMS
 {
     [Authorize, Route("api/[controller]"), ApiController]
-    public class MemberController : Controller
+    public class StaffController : Controller
     {
-        private readonly IService<Member> _service;
+        private readonly IService<Staff> _service;
         private readonly IAuthUserService _userService;
 
-        public MemberController(IService<Member> service, IAuthUserService userService)
+        public StaffController(IService<Staff> service, IAuthUserService userService)
         {
             _service = service;
             _userService = userService;
@@ -36,32 +36,31 @@ namespace DotNet.WebApi.Controllers.HMS
                 return NotFound();
             return Ok(entity);
         }
-        [HttpGet("Members/{branchId}")]
+        [HttpGet("Stafs/{branchId}")]
         public async Task<IActionResult> GetBranchesByHostel(int branchId)
         {
             var entities = await _service.FindAsync(b => b.BranchId == branchId);
             return Ok(entities);
         }
-
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] MemberDto entityDto)
+        public async Task<IActionResult> Create([FromBody] StaffDto entityDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var _entity = new Member
+            var _entity = new Staff
             {
                 FullName = entityDto.FullName,
-                MemberIdNo = entityDto.MemberIdNo,
+                StaffIdNo = entityDto.StaffIdNo,
                 Gender = entityDto.Gender,
+                PositionId = entityDto.PositionId,
+                JoiningDate = entityDto.JoiningDate,
                 DateOfBirth = entityDto.DateOfBirth,
                 IdentityNumber = entityDto.IdentityNumber,
                 Mobile = entityDto.Mobile,
                 Email = entityDto.Email,
                 Address = entityDto.Address,
-                BranchId = entityDto.BranchId,
-                RoomId = entityDto.RoomId,
-                BedId = entityDto.BedId,
-                Status = entityDto.Status, 
+                BranchId = entityDto.BranchId,            
+                Status = entityDto.Status,
                 CreatedAt = DateTime.UtcNow,
                 CreatedBy = _userService.GetUserId(HttpContext) // Assuming `_userService` is correctly initialized
             };
@@ -71,7 +70,7 @@ namespace DotNet.WebApi.Controllers.HMS
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] DTOs.MemberDto entityDto)
+        public async Task<IActionResult> Update(int id, [FromBody] DTOs.StaffDto entityDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -81,16 +80,16 @@ namespace DotNet.WebApi.Controllers.HMS
                 return NotFound(new { message = Messages.EntityNotFound }); // Handle the case where the entity does not exist
                                                                             // Update the properties of the existing entity
             existingEntity.FullName = entityDto.FullName;
-            existingEntity.MemberIdNo = entityDto.MemberIdNo;
+            existingEntity.StaffIdNo = entityDto.StaffIdNo;
             existingEntity.Gender = entityDto.Gender;
             existingEntity.DateOfBirth = entityDto.DateOfBirth;
+            existingEntity.JoiningDate = entityDto.JoiningDate;
             existingEntity.IdentityNumber = entityDto.IdentityNumber;
             existingEntity.Mobile = entityDto.Mobile;
             existingEntity.Email = entityDto.Email;
             existingEntity.Address = entityDto.Address;
-            existingEntity.BranchId = entityDto.BranchId;
-            existingEntity.RoomId = entityDto.RoomId;
-            existingEntity.BedId = entityDto.BedId;
+            existingEntity.PositionId = entityDto.PositionId;
+            existingEntity.BranchId = entityDto.BranchId;         
             existingEntity.Status = entityDto.Status; // Assuming Status is part of the entityDto
             existingEntity.UpdatedBy = _userService.GetUserId(HttpContext); // Replace with actual user ID retrieval logic
             existingEntity.UpdatedAt = DateTime.UtcNow;

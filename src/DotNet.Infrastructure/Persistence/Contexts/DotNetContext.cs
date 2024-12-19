@@ -1,6 +1,7 @@
 ﻿using DotNet.ApplicationCore.Entities;
 using DotNet.ApplicationCore.Entities.HMS;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace DotNet.Infrastructure.Persistence.Contexts
@@ -24,6 +25,8 @@ namespace DotNet.Infrastructure.Persistence.Contexts
         public DbSet<Room>  Rooms { get; set; }
         public DbSet<Bed>  Beds { get; set; }
         public DbSet<Member> Members { get; set; }
+        public DbSet<Position> Positions { get; set; }
+        public DbSet<Staff> Staffs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {        
@@ -64,6 +67,25 @@ namespace DotNet.Infrastructure.Persistence.Contexts
                 .WithOne(b => b.AssignedMember)
                 .HasForeignKey<Member>(m => m.BedId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            // Configure MemberIdNo as unique and nullable
+            modelBuilder.Entity<Member>()
+                .HasIndex(m => m.MemberIdNo)
+                .IsUnique()
+                .HasFilter("[MemberIdNo] IS NOT NULL");
+
+            // Staff ↔ Branch: Many - to - One
+            modelBuilder.Entity<Staff>()
+                .HasOne(s => s.Branch)
+                .WithMany(b => b.Staffs)
+                .HasForeignKey(s => s.BranchId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Configure StaffIdNo as unique and nullable
+            modelBuilder.Entity<Staff>()
+                .HasIndex(s => s.StaffIdNo)
+                .IsUnique()
+                .HasFilter("[StaffIdNo] IS NOT NULL");
         }
 
 

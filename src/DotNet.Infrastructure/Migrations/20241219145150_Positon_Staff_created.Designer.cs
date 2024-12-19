@@ -4,16 +4,19 @@ using DotNet.Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Store.Infrastructure.Migrations
+namespace Daud.Infrastructure.Migrations
 {
     [DbContext(typeof(DotNetContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20241219145150_Positon_Staff_created")]
+    partial class Positon_Staff_created
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -367,9 +370,6 @@ namespace Store.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("MemberIdNo")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Mobile")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -394,60 +394,9 @@ namespace Store.Infrastructure.Migrations
 
                     b.HasIndex("BranchId");
 
-                    b.HasIndex("MemberIdNo")
-                        .IsUnique()
-                        .HasFilter("[MemberIdNo] IS NOT NULL");
-
                     b.HasIndex("RoomId");
 
                     b.ToTable("Members", "core");
-                });
-
-            modelBuilder.Entity("DotNet.ApplicationCore.Entities.HMS.Position", b =>
-                {
-                    b.Property<int>("PositionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PositionId"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DeletedBy")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("HierarchyLevel")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("PositionName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte>("Status")
-                        .HasColumnType("tinyint");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("UpdatedBy")
-                        .HasColumnType("int");
-
-                    b.HasKey("PositionId");
-
-                    b.ToTable("Positions", "core");
                 });
 
             modelBuilder.Entity("DotNet.ApplicationCore.Entities.HMS.Room", b =>
@@ -544,88 +493,6 @@ namespace Store.Infrastructure.Migrations
                     b.HasKey("RoomCategoryId");
 
                     b.ToTable("RoomCategories", "core");
-                });
-
-            modelBuilder.Entity("DotNet.ApplicationCore.Entities.HMS.Staff", b =>
-                {
-                    b.Property<int>("StaffId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffId"));
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("BranchId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DeletedBy")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Gender")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IdentityNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("JoiningDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Mobile")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PositionId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StaffIdNo")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<byte>("Status")
-                        .HasColumnType("tinyint");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("UpdatedBy")
-                        .HasColumnType("int");
-
-                    b.HasKey("StaffId");
-
-                    b.HasIndex("BranchId");
-
-                    b.HasIndex("PositionId");
-
-                    b.HasIndex("StaffIdNo")
-                        .IsUnique()
-                        .HasFilter("[StaffIdNo] IS NOT NULL");
-
-                    b.ToTable("Staffs", "core");
                 });
 
             modelBuilder.Entity("DotNet.ApplicationCore.Entities.NotificationArea", b =>
@@ -1051,25 +918,6 @@ namespace Store.Infrastructure.Migrations
                     b.Navigation("RoomCategory");
                 });
 
-            modelBuilder.Entity("DotNet.ApplicationCore.Entities.HMS.Staff", b =>
-                {
-                    b.HasOne("DotNet.ApplicationCore.Entities.HMS.Branch", "Branch")
-                        .WithMany("Staffs")
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("DotNet.ApplicationCore.Entities.HMS.Position", "Position")
-                        .WithMany("Staffs")
-                        .HasForeignKey("PositionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Branch");
-
-                    b.Navigation("Position");
-                });
-
             modelBuilder.Entity("DotNet.ApplicationCore.Entities.HMS.Bed", b =>
                 {
                     b.Navigation("AssignedMember");
@@ -1080,18 +928,11 @@ namespace Store.Infrastructure.Migrations
                     b.Navigation("Members");
 
                     b.Navigation("Rooms");
-
-                    b.Navigation("Staffs");
                 });
 
             modelBuilder.Entity("DotNet.ApplicationCore.Entities.HMS.Hostel", b =>
                 {
                     b.Navigation("Branches");
-                });
-
-            modelBuilder.Entity("DotNet.ApplicationCore.Entities.HMS.Position", b =>
-                {
-                    b.Navigation("Staffs");
                 });
 
             modelBuilder.Entity("DotNet.ApplicationCore.Entities.HMS.Room", b =>

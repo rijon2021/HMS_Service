@@ -4,16 +4,19 @@ using DotNet.Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Store.Infrastructure.Migrations
+namespace Daud.Infrastructure.Migrations
 {
     [DbContext(typeof(DotNetContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20241219150017_Positon_Staff_created1")]
+    partial class Positon_Staff_created1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -367,9 +370,6 @@ namespace Store.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("MemberIdNo")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Mobile")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -393,10 +393,6 @@ namespace Store.Infrastructure.Migrations
                         .HasFilter("[BedId] IS NOT NULL");
 
                     b.HasIndex("BranchId");
-
-                    b.HasIndex("MemberIdNo")
-                        .IsUnique()
-                        .HasFilter("[MemberIdNo] IS NOT NULL");
 
                     b.HasIndex("RoomId");
 
@@ -603,9 +599,6 @@ namespace Store.Infrastructure.Migrations
                     b.Property<int>("PositionId")
                         .HasColumnType("int");
 
-                    b.Property<string>("StaffIdNo")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<byte>("Status")
                         .HasColumnType("tinyint");
 
@@ -620,10 +613,6 @@ namespace Store.Infrastructure.Migrations
                     b.HasIndex("BranchId");
 
                     b.HasIndex("PositionId");
-
-                    b.HasIndex("StaffIdNo")
-                        .IsUnique()
-                        .HasFilter("[StaffIdNo] IS NOT NULL");
 
                     b.ToTable("Staffs", "core");
                 });

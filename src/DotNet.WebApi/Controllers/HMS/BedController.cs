@@ -40,7 +40,12 @@ namespace DotNet.WebApi.Controllers.HMS
                 return NotFound();
             return Ok(entity);
         }
-
+        [HttpGet("Beds/{roomId}")]
+        public async Task<IActionResult> GetBedsByRoom(int roomId)
+        {
+            var entities = await _service.FindAsync(b => b.RoomId == roomId);
+            return Ok(entities);
+        }
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] BedDto entityDto)
         {

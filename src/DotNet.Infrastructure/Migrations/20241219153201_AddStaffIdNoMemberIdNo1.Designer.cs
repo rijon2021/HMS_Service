@@ -4,16 +4,19 @@ using DotNet.Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Store.Infrastructure.Migrations
+namespace Daud.Infrastructure.Migrations
 {
     [DbContext(typeof(DotNetContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20241219153201_AddStaffIdNoMemberIdNo1")]
+    partial class AddStaffIdNoMemberIdNo1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
