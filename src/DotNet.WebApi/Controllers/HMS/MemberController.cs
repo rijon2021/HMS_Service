@@ -36,10 +36,22 @@ namespace DotNet.WebApi.Controllers.HMS
                 return NotFound();
             return Ok(entity);
         }
+        //[HttpGet("Members/{branchId}")]
+        //public async Task<IActionResult> GetBranchesByHostel(int branchId)
+        //{
+        //    var entities = await _service.FindAsync(b => b.BranchId == branchId);
+        //    return Ok(entities);
+        //}  
         [HttpGet("Members/{branchId}")]
         public async Task<IActionResult> GetBranchesByHostel(int branchId)
         {
-            var entities = await _service.FindAsync(b => b.BranchId == branchId);
+            // Use FindAsync with includes for Branch, Room, and Bed
+            var entities = await _service.FindAsync(
+                b => b.BranchId == branchId,      // Filter by branchId
+                b => b.Branch,                    // Include the related Branch data
+                b => b.Room,                      // Include the related Room data
+                b => b.Bed                        // Include the related Bed data
+            );
             return Ok(entities);
         }
 

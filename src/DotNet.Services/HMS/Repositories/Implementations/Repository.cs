@@ -34,6 +34,17 @@ namespace DotNet.Services.HMS.Repositories.Implementation
         {
             return  _dbSet.AsQueryable();
         }
+        public IQueryable<T> Query(params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _dbSet;
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);  // Add each include to the query
+            }
+
+            return query;
+        }
 
         public async Task AddAsync(T entity)
         {

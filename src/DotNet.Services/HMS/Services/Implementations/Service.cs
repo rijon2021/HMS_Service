@@ -60,6 +60,12 @@ namespace DotNet.Services.HMS.Services.Implementations
         {
             return await _repository.Query().Where(predicate).ToListAsync();
         }
+        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+        {
+            var query = _repository.Query(includes); // Pass the includes here
+            return await query.Where(predicate).ToListAsync();
+        }
+
     }
 
 }

@@ -12,6 +12,7 @@ namespace DotNet.Services.HMS.Repositories.Interfaces
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> GetByIdAsync(int id);
         IQueryable<T> Query();
+        IQueryable<T> Query(params Expression<Func<T, object>>[] includes);
         Task AddAsync(T entity);
         void Update(T entity);
         void Delete(T entity);     

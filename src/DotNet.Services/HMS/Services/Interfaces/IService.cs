@@ -12,6 +12,7 @@ namespace DotNet.Services.HMS.Services.Interfaces
         Task<IEnumerable<T>> GetAll();
         Task<T> GetById(int id);
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
+        Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] include);
         Task<T> Add(T entity);
         Task Update(T entity);
         Task Delete(int id);

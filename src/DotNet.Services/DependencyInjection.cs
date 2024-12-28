@@ -49,6 +49,14 @@ namespace DotNet.Services
             // Register UnitOfWork
             services.AddScoped<DotNet.Services.HMS.UnitOfWork.IUnitOfWork, DotNet.Services.HMS.UnitOfWork.UnitOfWork>();
 
+
+            // Configure JsonSerializer to handle circular references using ReferenceHandler.Preserve
+            services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+                });
+
             var serviceProvider = services.BuildServiceProvider();
             try
             {
