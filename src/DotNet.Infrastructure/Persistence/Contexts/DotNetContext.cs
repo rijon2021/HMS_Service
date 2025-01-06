@@ -24,6 +24,7 @@ namespace DotNet.Infrastructure.Persistence.Contexts
         public DbSet<Branch>  Branches { get; set; }
         public DbSet<Room>  Rooms { get; set; }
         public DbSet<Bed>  Beds { get; set; }
+        public DbSet<BedAssignHistory>  BedAssignHistories { get; set; }
         public DbSet<Member> Members { get; set; }
         public DbSet<Position> Positions { get; set; }
         public DbSet<Staff> Staffs { get; set; }
@@ -86,6 +87,38 @@ namespace DotNet.Infrastructure.Persistence.Contexts
                 .HasIndex(s => s.StaffIdNo)
                 .IsUnique()
                 .HasFilter("[StaffIdNo] IS NOT NULL");
+
+            //BedAssignHistory Relation 
+            modelBuilder.Entity<BedAssignHistory>()
+            .HasOne(b => b.Member)
+            .WithMany()  // Assuming one Member can have many bed assignments
+            .HasForeignKey(b => b.MemberId);
+
+            modelBuilder.Entity<BedAssignHistory>()
+                .HasOne(b => b.Bed)
+                .WithMany()  // Assuming one Bed can have many assignments
+                .HasForeignKey(b => b.BedId);
+
+            modelBuilder.Entity<BedAssignHistory>()
+                .HasOne(b => b.Room)
+                .WithMany()  // Assuming one Room can have many assignments
+                .HasForeignKey(b => b.RoomId);
+
+            modelBuilder.Entity<BedAssignHistory>()
+                .HasOne(b => b.Branch)
+                .WithMany()  // Assuming one Branch can have many assignments
+                .HasForeignKey(b => b.BranchId);
+
+            modelBuilder.Entity<BedAssignHistory>()
+                .HasOne(b => b.AssignedByStaff)
+                .WithMany()  // Assuming one Staff member can assign many beds
+                .HasForeignKey(b => b.AssignedBy);
+
+            modelBuilder.Entity<BedAssignHistory>()
+                .HasOne(b => b.UnassignedByStaff)
+                .WithMany()  // Assuming one Staff member can unassign many beds
+                .HasForeignKey(b => b.UnassignedBy)
+                .OnDelete(DeleteBehavior.SetNull);  // Handle unassignment case
         }
 
 

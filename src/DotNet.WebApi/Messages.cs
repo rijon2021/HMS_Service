@@ -7,6 +7,7 @@
         public const string CreationSuccessful = "Successfully saved.";
         public const string UpdateSuccessful = "Successfully updated.";
         public const string ValidationFailed = "Validation failed";
+        
     }
 
 }
