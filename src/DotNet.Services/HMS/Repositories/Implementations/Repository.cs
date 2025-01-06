@@ -38,10 +38,11 @@ namespace DotNet.Services.HMS.Repositories.Implementation
         {
             IQueryable<T> query = _dbSet;
 
-            foreach (var include in includes)
-            {
-                query = query.Include(include);  // Add each include to the query
-            }
+            if(includes!=null && includes.Any())
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);  // Add each include to the query
+                }
 
             return query;
         }

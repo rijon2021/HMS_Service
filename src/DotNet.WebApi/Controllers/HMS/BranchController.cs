@@ -23,8 +23,13 @@ namespace DotNet.WebApi.Controllers.HMS
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var entities = await _service.GetAll();
+            // var entities = await _service.GetAll();           
+            var entities = await _service.FindAsync(
+               null,// No Filter
+               b => b.Hostel,b => b.Rooms,b => b.Members,b => b.Staffs);               
             return Ok(entities);
+            //var entities = await _service.GetAll();
+            //return Ok(entities);
         }
 
         [HttpGet("{id}")]
