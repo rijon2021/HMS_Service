@@ -131,7 +131,7 @@ namespace DotNet.WebApi.Controllers.HMS
             return Ok(new { message = "Successfully Bed Assigned", entity = createdEntity });
         }
 
-      
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UnassignBed(int id)
         {

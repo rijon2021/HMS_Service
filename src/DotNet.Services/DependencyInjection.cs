@@ -42,6 +42,8 @@ namespace DotNet.Services
             services.AddScoped(typeof(IService<>), typeof(Service<>));
             // Register the auth-user service 
             services.AddScoped(typeof(IAuthUserService), typeof(AuthUserService));
+            // Register the member service 
+            services.AddScoped<IMemberService, MemberService>();
 
             // Register the generic repository for all entities
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

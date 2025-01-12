@@ -12,10 +12,10 @@ namespace DotNet.WebApi.Controllers.HMS
     [Authorize, Route("api/[controller]"), ApiController]
     public class MemberController : Controller
     {
-        private readonly IService<Member> _service;
+        private readonly IMemberService _service;
         private readonly IAuthUserService _userService;
 
-        public MemberController(IService<Member> service, IAuthUserService userService)
+        public MemberController(IMemberService service, IAuthUserService userService)
         {
             _service = service;
             _userService = userService;
@@ -25,12 +25,13 @@ namespace DotNet.WebApi.Controllers.HMS
         public async Task<IActionResult> GetAll()
         {
            // var entities = await _service.GetAll();           
-            var entities = await _service.FindAsync(
-               null,      // No Filter 
-                b => b.Branch,                    // Include the related Branch data
-                b => b.Room,                      // Include the related Room data
-                b => b.Bed                        // Include the related Bed data
-            );
+            //var entities = await _service.FindAsync(
+            //   null,      // No Filter 
+            //    b => b.Branch,                    // Include the related Branch data
+            //    b => b.Room,                      // Include the related Room data
+            //    b => b.Bed                        // Include the related Bed data
+            //);
+            var entities= await _service.GetMembersDetails();
             return Ok(entities);
         }
 

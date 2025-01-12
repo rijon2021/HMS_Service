@@ -14,7 +14,7 @@ namespace DotNet.Services.HMS.Services.Implementations
     public class Service<T> : IService<T> where T : class
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IRepository<T> _repository;
+        public readonly IRepository<T> _repository;
 
         public Service(IUnitOfWork unitOfWork, IRepository<T> repository)
         {
