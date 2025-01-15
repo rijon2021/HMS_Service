@@ -58,6 +58,12 @@ namespace DotNet.Services
                 {
                     options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
                 });
+        
+            services.AddControllers().AddJsonOptions(options =>
+            {
+             options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+            });
+
 
             var serviceProvider = services.BuildServiceProvider();
             try
